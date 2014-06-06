@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" class="html">
+<head>
+  <meta charset="UTF-8">
+  <title>Timer test</title>
+  <link rel="stylesheet" href="/lib/mocha/mocha.css">
+  <script src="/lib/es5/es5-safe.js"></script>
+  <script src="/lib/seajs/sea.js"></script>
+  <script src="/lib/mocha/mocha.js"></script>
+</head>
+<body>
+  <div id="mocha"></div>
+  <script>
+    seajs.config({
+      alias : {
+        'timer' : '/src/timer.js',
+        'expect' : '/lib/expect/expect.js',
+        'sinon' : '/lib/sinon/sinon-1.7.1.js'
+      }
+    });
+
+    mocha.setup('bdd');
+
+    seajs.use(['/test/timer-test.js'], function(){
+      mocha.run();
+    });
+  </script>
+</body>
+</html>
