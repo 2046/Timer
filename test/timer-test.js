@@ -36,7 +36,7 @@ define(function(require, exports, module){
       setTimeout(function(){
         expect(spy.callCount).to.be(5);
         done();
-      }, 300);
+      }, 400);
     });
 
     it('使用breaker停止Timer', function(done){
@@ -94,18 +94,23 @@ define(function(require, exports, module){
     it('Timer每次间隔100ms', function(done){
       var i = 0;
       var endTime = null;
+      var spy = sinon.spy();
+      this.timeout(5000);
 
       new Timer(function(breaker){
         var elapsedTime = endTime ? (new Date() - endTime) : 100;
-
-        if((i++) === 9){
-          done();
-          expect([100, 101]).to.contain(elapsedTime);
+        spy();
+        if((i++) === 10){
           return breaker;
         }
-        sleep(50);
+        sleep(100);
         endTime = new Date();
       }, 100);
+
+      setTimeout(function(){
+        done();
+        expect(spy.callCount).to.be(5);
+      }, 1000);
     });
 
     function sleep(milliseconds){
