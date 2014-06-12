@@ -4,7 +4,6 @@
   function Timer(func, delay){
     this.func = func;
     this.delay = delay || 0;
-    this._breaker = {};
 
     this.start();
   }
@@ -12,14 +11,18 @@
   Timer.prototype.start = function(){
     var context = this;
 
+    this._status = 'start';
+
     context._timerId = setTimeout(function(){
-        if(context.func(context._breaker) !== context._breaker){
-            context.start();
-        }
+      context.func(context);
+      if(context._status !== 'stop'){
+        context.start();
+      }
     }, context.delay);
   }
 
   Timer.prototype.stop = function(){
+    this._status = 'stop';
     clearTimeout(this._timerId);
   }
 
