@@ -14,16 +14,16 @@ Timer
 ### 模块化加载
 ```javascript
 seajs.use(['timer'], function(Timer){
-  var timer = new Timer(function(breaker){
+  var timer = new Timer(function(){
     //somethings...
-    return breaker;
+    timer.stop();
   }, 1000);
 });
 
 require(['timer'], function(Timer){
   var timer = new Timer(function(){
     //somethings...
-    return breaker;
+    timer.stop();
   }, 1000);
 });
 ```
@@ -38,12 +38,12 @@ require(['timer'], function(Timer){
 </head>
 <body>
   seajs.use(['timer'], function(Timer){
-    new Timer(function(breaker){
+    new Timer(function(timer){
       console.log('once timer');
-      return breaker;
+      timer.stop();
     }, 1000);
 
-    var timer = new Timer(function(breaker){
+    var timer = new Timer(function(){
       console.log('balabala...');
     }, 1000);
 
