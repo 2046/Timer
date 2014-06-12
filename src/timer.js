@@ -3,7 +3,7 @@
 
   function Timer(func, delay){
     this.func = func;
-    this.delay = delay;
+    this.delay = delay || 0;
     this._breaker = {};
 
     this.start();
