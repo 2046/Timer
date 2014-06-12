@@ -11,9 +11,9 @@ define(function(require, exports, module){
     it('执行一次', function(done){
       var spy = sinon.spy();
 
-      new Timer(function(breaker){
+      new Timer(function(timer){
         spy();
-        return breaker;
+        timer.stop();
       }, 50);
 
       setTimeout(function(){
@@ -26,10 +26,10 @@ define(function(require, exports, module){
       var i = 0;
       var spy = sinon.spy();
 
-      new Timer(function(breaker){
+      new Timer(function(timer){
         spy();
         if((++i) === 5){
-          return breaker;
+          timer.stop();
         }
       }, 50);
 
@@ -39,18 +39,38 @@ define(function(require, exports, module){
       }, 400);
     });
 
-    it('使用breaker停止Timer', function(done){
+    it('在callback中使用stop()停止Timer', function(done){
       var spy = sinon.spy();
 
-      new Timer(function(breaker){
+      new Timer(function(timer){
         spy();
-        return breaker;
+        timer.stop();
       }, 50);
 
       setTimeout(function(){
         expect(spy.calledOnce).to.be(true);
         done();
       }, 120);
+    });
+
+    it('在callback中使用start()启动Timer', function(done){
+      var i = 0;
+      var spy = sinon.spy();
+
+      new Timer(function(timer){
+        spy();
+        timer.stop();
+        if((i++) <= 2){
+          setTimeout(function(){
+            timer.start();
+          }, 50);
+        }
+      }, 50);
+
+      setTimeout(function(){
+        expect(spy.callCount).to.be(2);
+        done();
+      }, 200);
     });
 
     it('使用stop()停止Timer', function(done){
@@ -74,7 +94,7 @@ define(function(require, exports, module){
     it('使用start()开始Timer', function(done){
       var spy = sinon.spy();
 
-      var timer = new Timer(function(){
+      var timer = new Timer(function(breaker){
         spy();
       }, 100);
       timer.stop();
@@ -97,11 +117,11 @@ define(function(require, exports, module){
       var spy = sinon.spy();
       this.timeout(5000);
 
-      new Timer(function(breaker){
+      new Timer(function(timer){
         var elapsedTime = endTime ? (new Date() - endTime) : 100;
         spy();
         if((i++) === 10){
-          return breaker;
+          timer.stop();
         }
         sleep(100);
         endTime = new Date();
